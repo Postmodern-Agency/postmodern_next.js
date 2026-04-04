@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link'; // <-- 1. Das hier neu importieren!
+import Link from 'next/link';
 import OverlayMenu from './OverlayMenu';
 
 const Header: React.FC = () => {
@@ -13,23 +13,34 @@ const Header: React.FC = () => {
         <div className="mx-auto w-full grid grid-cols-2 lg:grid-cols-3 items-center">
           
           <div className="flex justify-start">
-            {/* 2. Hier Link statt a benutzen */}
             <Link href="/" className="text-xl font-bold text-gray-900 tracking-tight">
               MeinLogo
             </Link>
           </div>
 
+          {/* === HIER IST DER NEUE MENU BUTTON MIT KLAMMERN === */}
           <div className="hidden lg:flex justify-center">
             <button 
               onClick={() => setIsMenuOpen(true)} 
-              className="text-gray-600 hover:text-black transition-colors font-medium cursor-pointer"
+              // 'group', 'relative' und 'flex items-center' hinzugefügt
+              className="group relative flex items-center text-gray-600 hover:text-black transition-colors text-xs font-normal cursor-pointer w-fit"
             >
-              Menu
+              {/* LINKE KLAMMER */}
+              <span className="absolute right-full mr-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                [
+              </span>
+              
+              {/* TEXT */}
+              <span>Menu</span>
+
+              {/* RECHTE KLAMMER */}
+              <span className="absolute left-full ml-1 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                ]
+              </span>
             </button>
           </div>
 
           <div className="flex justify-end">
-            {/* 3. Auch hier Link statt a benutzen */}
             <Link 
               href="/contact" 
               className="px-5 py-2 bg-black text-white text-sm font-semibold rounded-md hover:bg-gray-800 transition-colors"

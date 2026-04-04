@@ -2,7 +2,7 @@ import './globals.css';
 import Header from "../components/Header";
 
 export const metadata = {
-  title: 'Alex Lokasasmita | Portfolio',
+  title: 'Postmodern Agency',
   description: 'Developing & designing ideas into reality.',
 };
 

@@ -1,6 +1,7 @@
-'use client'; // <-- Das ist der entscheidende Teil für Next.js!
+'use client';
 
 import React, { useRef } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -26,7 +27,7 @@ const OverlayMenu: React.FC<OverlayMenuProps> = ({ isOpen, onClose }) => {
         ease: 'power3.inOut',
       });
     }
-  }, [isOpen]);
+  }, { scope: containerRef, dependencies: [isOpen] });
 
   return (
     <div 
@@ -36,28 +37,42 @@ const OverlayMenu: React.FC<OverlayMenuProps> = ({ isOpen, onClose }) => {
       <div className="absolute top-0 w-full h-[66px] px-6 flex items-center">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-2 lg:grid-cols-3 items-center">
           <div></div>
+          
+          {/* === HIER IST DER NEUE CLOSE BUTTON MIT KLAMMERN === */}
           <div className="hidden lg:flex justify-center">
             <button 
               onClick={onClose}
-              className="text-gray-900 hover:text-gray-500 transition-colors font-medium cursor-pointer"
+              className="group relative flex items-center text-gray-900 hover:text-gray-500 transition-colors text-xs font-normal cursor-pointer w-fit"
             >
-              Close
+              {/* LINKE KLAMMER */}
+              <span className="absolute right-full mr-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                [
+              </span>
+              
+              {/* TEXT */}
+              <span>Close</span>
+
+              {/* RECHTE KLAMMER */}
+              <span className="absolute left-full ml-1 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                ]
+              </span>
             </button>
           </div>
+          
           <div></div>
         </div>
       </div>
 
-      <nav className="flex flex-col gap-8 text-center">
-        <a href="/" className="text-black text-5xl font-bold hover:text-[#2a3e79] transition-colors">
+      <nav className="flex flex-col gap-2 text-center">
+        <Link href="/" onClick={onClose} className="text-black text-base font-normal hover:text-[#2a3e79] transition-colors">
           Home
-        </a>
-        <a href="/work" className="text-black text-5xl font-bold hover:text-[#2a3e79] transition-colors">
+        </Link>
+        <Link href="/work" onClick={onClose} className="text-black text-base font-normal hover:text-[#2a3e79] transition-colors">
           Work
-        </a>
-        <a href="/about" className="text-black text-5xl font-bold hover:text-[#2a3e79] transition-colors">
+        </Link>
+        <Link href="/about" onClick={onClose} className="text-black text-base font-normal hover:text-[#2a3e79] transition-colors">
           About
-        </a>
+        </Link>
       </nav>
     </div>
   );
