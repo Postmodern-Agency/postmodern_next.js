@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* Zielt direkt auf die ID des Indicators ab */
+#devtools-indicator,
+[id="devtools-indicator"],
+nextjs-portal {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
