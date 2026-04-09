@@ -46,3 +46,22 @@ body {
   /* HINWEIS: font-family: Arial... wurde hier gelöscht, 
      damit deine Next.js Schriftart aus der layout.tsx endlich wirken kann! */
 }
+
+
+/* In deiner globals.css ganz unten einfügen */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  /* Wir verschieben den Block genau um die Hälfte (-50%), weil er aus 2 identischen Teilen besteht */
+  100% { transform: translateX(-50%); } 
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+  display: flex;
+  width: max-content; /* Sagt dem Container, dass er genau so breit sein soll wie der Text */
+}
+/* Ein kleiner Bonus für extrem coole Outlined-Schriften im Hintergrund */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px #333; /* Farbe der Umrandung */
+}

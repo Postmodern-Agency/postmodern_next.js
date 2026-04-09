@@ -50,8 +50,8 @@ const Header: React.FC = () => {
           
           <div className="flex justify-start">
             {/* WICHTIG: Keine eigenen Textfarben (wie text-gray-900) vergeben! Das regelt jetzt text-white vom Header */}
-            <Link href="/" className="text-xl font-bold tracking-tight">
-              MeinLogo
+            <Link href="/" className="text-m uppercase font-normal tracking-tight">
+              Postmodern
             </Link>
           </div>
 
