@@ -20,7 +20,7 @@ export default function HeadlineSection({
       
       {/* === 4. HIER IST DIE MAGIE === */}
       {/* Es rendert jetzt dynamisch als <h1>, <h2> oder <h3>, behält aber immer denselben Look! */}
-      <Component className="text-3xl md:text-[3rem] leading-[1.2] font-light text-black tracking-tight">
+      <Component className="text-3xl sm:text-3xl md:text-4xl leading-[1.2] font-light text-[#2a3e79] tracking-tight">
         
         <span className="block md:ml-[6.9rem]">
           {children}

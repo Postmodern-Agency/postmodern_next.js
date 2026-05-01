@@ -52,7 +52,7 @@ export default function AnimatedUnderline({
   const gradientId = useId();
 
   useGSAP(() => {
-    if (!lineRef.current) return;
+    if (!lineRef.current || !containerRef.current) return;
     
     // 1. Exakte Länge berechnen für nahtlosen Start
     const pathLength = lineRef.current.getTotalLength();
@@ -62,23 +62,30 @@ export default function AnimatedUnderline({
       strokeDashoffset: pathLength,
     });
 
-    // 2. Animations-Konfiguration
-    const animationConfig: gsap.TweenVars = {
+    // 2. Animation erstellen, aber PAUSIERT lassen
+    const anim = gsap.to(lineRef.current, {
       strokeDashoffset: 0,
-      duration: 0.6, // Darf für eine Unterstreichung ruhig einen Tick länger dauern
+      duration: 0.6, 
       delay: delay,
-      ease: 'power2.out', // Dynamischeres Easing
-    };
+      ease: 'power2.out',
+      paused: true // WICHTIG!
+    });
 
     if (!triggerOnLoad) {
-      animationConfig.scrollTrigger = {
-        trigger: containerRef.current,
-        start: 'top 50%', 
-      };
-    }
+      // Auch hier die Kamera-Methode!
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          anim.play();
+          observer.disconnect();
+        }
+      }, { rootMargin: "-50% 0px -50% 0px" });
 
-    gsap.to(lineRef.current, animationConfig);
-  }, { scope: containerRef });
+      observer.observe(containerRef.current);
+      return () => observer.disconnect();
+    } else {
+      anim.play();
+    }
+  }, { scope: containerRef, dependencies: [delay, triggerOnLoad] });
 
   return (
     <Component 

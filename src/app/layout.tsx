@@ -2,6 +2,7 @@ import React from 'react';
 import './globals.css';
 import Header3Clmn from "../components/Header3Clmn";
 import Footer from "../components/Footer";
+import Preloader from '../components/Preloader';
 
 // 1. Inter importieren und konfigurieren
 import { Inter } from 'next/font/google';
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className="overscroll-none">
       <body className={`${inter.className} bg-gray-50 min-h-screen flex flex-col overscroll-none`}>
+        <Preloader />
         
         <Header3Clmn />
         

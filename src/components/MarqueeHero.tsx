@@ -5,19 +5,19 @@ import AnimatedHeading from './AnimatedHeading';
 
 const MarqueeContent = () => (
   <div className="flex gap-16 pr-16 items-center">
-    <span className="text-[32vw] md:text-[18vw] lg:text-[20vw] font-black leading-none text-[#f1f1f0]">POST</span>
-    <span className="text-[32vw] md:text-[18vw] lg:text-[20vw] font-black leading-none text-[#f1f1f0]">WORK</span>
-    <span className="text-[32vw] md:text-[18vw] lg:text-[20vw] font-black leading-none text-[#f1f1f0]">MODERN</span>
-    <span className="text-[32vw] md:text-[18vw] lg:text-[20vw] font-black leading-none text-[#f1f1f0]">RESULTS</span>
+    <span className="text-[32vw] md:text-[18vw] lg:text-[24vw] font-black leading-none text-[#f1f1f0]">POST</span>
+    <span className="text-[32vw] md:text-[18vw] lg:text-[24vw] font-black leading-none text-[#f1f1f0]">WORK</span>
+    <span className="text-[32vw] md:text-[18vw] lg:text-[24vw] font-black leading-none text-[#f1f1f0]">MODERN</span>
+    <span className="text-[32vw] md:text-[18vw] lg:text-[24vw] font-black leading-none text-[#f1f1f0]">RESULTS</span>
   </div>
 );
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full h-screen text-[#1a1a1a] bg-[#D5D5D5] overflow-hidden flex flex-col justify-end pb-18 md:pb-32">
+    <section className="relative w-full h-screen text-[#2a3e79] bg-[#fff] overflow-hidden flex flex-col justify-end pb-18 md:pb-32">
       
       {/* === 1. DER HINTERGRUND-MARQUEE === */}
-      <div className="absolute top-[20%] left-0 w-full overflow-hidden opacity-100 pointer-events-none select-none z-0">
+      <div className="absolute top-[10%] left-0 w-full overflow-hidden opacity-100 pointer-events-none select-none z-0">
         <div className="animate-marquee">
           {/* Block 1 */}
           <MarqueeContent />
@@ -37,7 +37,7 @@ export default function HeroSection() {
         
         {/* Haupt-Textblock */}
         <div className="col-span-12 md:col-span-6">
-          <h1 className="text-5xl md:text-5xl lg:text-6xl xl:text-6xl">
+          <h1 className="text-5xl md:text-5xl lg:text-6xl xl:text-6xl font-bold leading-none">
             <span className="block">We create content that turns into results.</span>
             
             {/* === HIER IST DER FIX === */}

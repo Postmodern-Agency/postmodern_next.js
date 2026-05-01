@@ -25,7 +25,7 @@ const projects = [
     id: 'avv-euroshop',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
     type: '[Case study]',
-    title: 'AVV Euroshop',
+    title: 'Adidas',
     metadata: [
       { label: '[Year]', value: '2020' },
       { label: '[Client]', value: 'AVV' },
@@ -36,7 +36,7 @@ const projects = [
     id: 'kadewe',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
     type: '[Case study]',
-    title: 'KaDeWe The Art of Sitting',
+    title: 'Adidas',
     metadata: [
       { label: '[Year]', value: '2020' },
       { label: '[Type]', value: 'Campaign' }
@@ -46,7 +46,7 @@ const projects = [
     id: 'casper',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
     type: '[Case study]',
-    title: 'Casper',
+    title: 'Adidas',
     metadata: [
       { label: '[Year]', value: '2018' },
       { label: '[Client]', value: 'Casper' },
@@ -57,7 +57,7 @@ const projects = [
     id: 'siematic',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
     type: '[Case study]',
-    title: 'Siematic SLX Launch',
+    title: 'Adidas',
     metadata: []
   }
 ];
@@ -111,20 +111,20 @@ export default function References() {
             {/* === TEXT CONTAINER (40% Breite) === */}
             <div className="flex flex-col w-[40%] pl-[15px]">
               
-              <span className="text-[11px] text-black font-light mb-1">
+              <span className="text-[11px] text-[#2a3e79] font-light mb-1">
                 {project.type}
               </span>
               
-              <h2 className="text-m md:text-xl leading-tight font-medium text-black mb-4">
+              <h2 className="text-m md:text-xl leading-tight font-medium text-[#2a3e79] mb-4">
                 {project.title}
               </h2>
               
               {project.metadata.length > 0 && (
-                <ul className="flex flex-col gap-1 text-[11px] text-black">
+                <ul className="flex flex-col gap-1 text-[11px] text-[#2a3e79]">
                   {project.metadata.map((meta, index) => (
                     <li key={index} className="flex flex-wrap">
                       <span className="min-w-[70px]">{meta.label}</span>
-                      <span className="text-black">{meta.value}</span>
+                      <span className="text-[#2a3e79]">{meta.value}</span>
                     </li>
                   ))}
                 </ul>
