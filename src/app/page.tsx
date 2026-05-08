@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image'; // === PROFI: Next.js Image Import ===
 
-import References from "../components/References";
+import References from "../components/InfluencerGrid";
 import AnimatedHeading from "../components/AnimatedHeading";
 import ClientGrid from "../components/ClientGrid";
-import MarqueeHero from "../components/MarqueeHero";
+
+import ProjectList from '../components/ProjectList';
+import ImageUniverse from '../components/ImageUniverse';
 
 // === DATEN FÜR DIE LISTEN ===
 const capabilities = [
@@ -39,8 +41,10 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-24 md:gap-44 pb-32">
 
-      <MarqueeHero />
-      <References />
+      {/* Das 3D Universum - Scrollt für 400vh und gibt dann den Rest der Seite frei */}
+      <ImageUniverse />
+      
+      <ProjectList />
       <ClientGrid />
       
       {/* ========================================= */}
@@ -50,9 +54,9 @@ export default function Home() {
         
         {/* Spalte 1: Artist Administration */}
         <section className="col-span-12 md:col-span-3">
-          <p className="text-[11px] text-[#2a3e79] font-medium">Artist Administration</p>
+          <p className="text-[12px] text-[#2a3e79] font-medium">Artist Administration</p>
           <div className="h-[1px] w-full bg-[#2a3e79] mt-1 mb-2"></div>
-          <ul className="flex flex-col text-sm font-medium text-[#2a3e79]">
+          <ul className="flex flex-col text-[16px] leading-[1] font-medium text-[#2a3e79]">
             {capabilities.map((cap) => (
               <li key={cap}>{cap}</li>
             ))}
@@ -61,9 +65,9 @@ export default function Home() {
 
         {/* Spalte 2: Campaign Coordination */}
         <section className="col-span-12 md:col-span-3">
-          <p className="text-[11px] text-[#2a3e79] font-medium">Campaign Coordination</p>
+          <p className="text-[12px] text-[#2a3e79] font-medium">Campaign Coordination</p>
           <div className="h-[1px] w-full bg-[#2a3e79] mt-1 mb-2"></div>
-          <ul className="flex flex-col text-sm font-medium text-[#2a3e79]">
+          <ul className="flex flex-col text-[16px] leading-[1] font-medium text-[#2a3e79]">
             {campaignC.map((campaign) => (
               <li key={campaign}>{campaign}</li>
             ))}
@@ -72,9 +76,9 @@ export default function Home() {
 
         {/* Spalte 3: Creatives (Mit AnimatedHeading) */}
         <section className="col-span-12 md:col-span-3">
-          <p className="text-[11px] text-[#2a3e79] font-medium">Creatives</p>
+          <p className="text-[12px] text-[#2a3e79] font-medium">Creatives</p>
           <div className="h-[1px] w-full bg-[#2a3e79] mt-1 mb-2"></div>
-          <ul className="flex flex-col text-sm font-medium text-[#2a3e79]">
+          <ul className="flex flex-col text-[16px] leading-[1] font-medium text-[#2a3e79]">
             {clients.map((client, index) => (
               <li 
                 key={client.name} 
@@ -90,7 +94,6 @@ export default function Home() {
                   markerWidth="105%"
                   markerOffsetX="-5px"
                   markerRotation="-1deg"
-              
                 />
               </li>
             ))}

@@ -4,12 +4,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import gsap from 'gsap';
+import { usePathname } from 'next/navigation'; // === NEU: Router Import ===
 
 import AnimatedHeading from './AnimatedHeading'; 
 
 export default function Header() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [time, setTime] = useState<string>('');
+  
+  // === NEU: Wir holen uns den aktuellen Pfad ===
+  const pathname = usePathname();
   
   const headerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -40,12 +44,11 @@ export default function Header() {
     gsap.killTweensOf([headerRef.current, menuRef.current, contentRef.current]);
 
     if (isAboutOpen) {
-      // 1. Header wird zum blauen Milchglas & Text wird weiß
       gsap.to(headerRef.current, { 
-        backgroundColor: '#22468a80',       // Die blaue Farbe aus deiner Referenz
-        backdropFilter: 'blur(30px)',       // Der Glass-Effekt
-        WebkitBackdropFilter: 'blur(30px)', // Wichtig für Apple/Safari User!
-        color: '#ffffff',                   // Schriftfarbe wird weiß
+        backgroundColor: '#22468a80',       
+        backdropFilter: 'blur(30px)',       
+        WebkitBackdropFilter: 'blur(30px)', 
+        color: '#ffffff',                   
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', 
         duration: 0.3, 
         ease: 'power2.out' 
@@ -77,7 +80,6 @@ export default function Header() {
         ease: 'power3.inOut' 
       });
       
-      // 3. Header wird wieder komplett unsichtbar & Text wird schwarz
       gsap.to(headerRef.current, { 
         backgroundColor: 'rgba(244, 244, 244, 0)', 
         backdropFilter: 'blur(0px)',
@@ -91,6 +93,11 @@ export default function Header() {
     }
   }, [isAboutOpen]);
 
+  // === NEU: Dynamischer Delay (Verzögerung) ===
+  // Startseite: 6.2s Preloader-Dauer + 0.2s Puffer = 6.4s
+  // Unterseiten: Standard 0.2s
+  const highlightDelay = pathname === '/' ? 6.4 : 0.2;
+
   return (
     <>
       <div 
@@ -102,25 +109,23 @@ export default function Header() {
 
       <header 
         ref={headerRef}
-        // text-black ist hier nur der Startwert, GSAP überschreibt das!
         className="fixed top-0 left-0 w-full px-6 z-50 text-black font-medium text-xs tracking-tight"
       >
         <nav className="flex flex-col md:grid md:grid-cols-10 gap-4 md:gap-1 pt-4 pb-4 leading-tight">
           
           <div className="md:col-span-3 flex flex-col justify-start">
-            <Link href="/" className="w-fit group">
+            <Link href="/" className="w-fit group text-base md:text-xl font-bold tracking-normal">
               <AnimatedHeading 
-                highlightText="Postmodern"
+                highlightText="Postmodern."
                 markerWidth="115%"              
                 triggerOnLoad={true}           
-                delay={0.2} 
+                delay={highlightDelay} // === FIX: Hier übergeben wir den dynamischen Wert! ===
                 markerHeight="100%" 
                 markerOffsetX="0"  
                 markerColorRGB="255 232 62"
               />
             </Link>
 
-            {/* Feste Textfarben entfernt, erbt jetzt das Weiß/Schwarz vom Header */}
             <span className="flex items-center gap-2 mt-[-2px]">
               Germany <span className="w-[70px] font-light text-xs opacity-70">{time || '...'}</span>
             </span>
@@ -133,7 +138,6 @@ export default function Header() {
             <li className="flex justify-end w-full">
               <button 
                 onClick={() => setIsAboutOpen(!isAboutOpen)} 
-                // Button erbt jetzt auch sauber die Farbe und wird nur etwas blasser beim "Close" Status
                 className={`cursor-pointer transition-opacity hover:opacity-50 ${isAboutOpen ? 'opacity-60' : ''}`}
               >
                 {isAboutOpen ? '(Close)' : 'About'}
@@ -151,8 +155,6 @@ export default function Header() {
           <div className="pt-2"> 
             <main 
               ref={contentRef} 
-              // Hintergrundfarbe aus 'main' entfernt, damit der Header-Background durchscheint!
-              // border-current passt sich der Textfarbe (Weiß/Schwarz) automatisch an
               className="w-full border-t border-current/20 p-4 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 opacity-0"
             >
               
@@ -169,7 +171,6 @@ export default function Header() {
               <div className="flex flex-col gap-8 text-sm">
                 <div>
                   <p className="font-bold mb-2">POSTMODERN</p>
-                  {/* Feste Grautöne durch opacity ersetzt */}
                   <p className="opacity-70">
                     HOUSE OF/FOR CREATIVES <br />
                     HAMBURG (HH)

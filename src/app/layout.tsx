@@ -2,10 +2,11 @@ import React from 'react';
 import './globals.css';
 import Header3Clmn from "../components/Header3Clmn";
 import Footer from "../components/Footer";
-import Preloader from '../components/Preloader';
+import Preloader from '../components/CinematicPreloader';
 
 // 1. Inter importieren und konfigurieren
 import { Inter } from 'next/font/google';
+import CinematicPreloader from '../components/CinematicPreloader';
 const inter = Inter({ subsets: ['latin'] });
 
 // 2. METADATA (Nur EINMAL erlaubt!)
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className="overscroll-none">
       <body className={`${inter.className} bg-gray-50 min-h-screen flex flex-col overscroll-none`}>
-        <Preloader />
+        <CinematicPreloader />
         
         <Header3Clmn />
         
