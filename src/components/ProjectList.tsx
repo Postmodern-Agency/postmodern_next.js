@@ -10,9 +10,9 @@ const projects = [
   {
     id: 'devin-booker',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
-    title: 'Book Projects',
+    title: 'Project 1',
     metadata: [
-      { value: 'Devin Booker', label: 'Client' },
+      { value: 'Client 1', label: 'Client' },
       { value: 'Branding', label: 'Categories' },
       { value: 'Various', label: 'Format' }
     ] 
@@ -20,9 +20,9 @@ const projects = [
   {
     id: 'bmw-m',
     imgSrc: '/images/657168499_18341097094246402_3273964248574590946_n.jpg',
-    title: 'Maybach Vision',
+    title: 'Project 2',
     metadata: [
-      { value: 'BMW Group', label: 'Client' },
+      { value: 'Client 2', label: 'Client' },
       { value: 'Campaign', label: 'Categories' },
       { value: 'Digital', label: 'Format' }
     ]
@@ -30,9 +30,9 @@ const projects = [
   {
     id: 'avv-euroshop',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
-    title: 'Euroshop 2020',
+    title: 'Project 3',
     metadata: [
-      { value: 'AVV', label: 'Client' },
+      { value: 'Client 3', label: 'Client' },
       { value: 'Architecture', label: 'Categories' },
       { value: 'Exhibition', label: 'Format' }
     ]
@@ -40,9 +40,9 @@ const projects = [
   {
     id: 'kadewe',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
-    title: 'KaDeWe',
+    title: 'Project 4',
     metadata: [
-      { value: 'KaDeWe Group', label: 'Client' },
+      { value: 'Client 4', label: 'Client' },
       { value: 'Campaign', label: 'Categories' },
       { value: 'Print, Film', label: 'Format' }
     ]
@@ -50,9 +50,9 @@ const projects = [
   {
     id: 'casper',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
-    title: 'Casper Tour',
+    title: 'Project 5',
     metadata: [
-      { value: 'Casper', label: 'Client' },
+      { value: 'Client 5', label: 'Client' },
       { value: 'Digital, Film', label: 'Categories' },
       { value: 'Social', label: 'Format' }
     ]
@@ -60,9 +60,9 @@ const projects = [
   {
     id: 'siematic',
     imgSrc: '/images/652770040_18398061811199312_4635558372509135957_n.jpg',
-    title: 'SieMatic',
+    title: 'Project 6',
     metadata: [
-      { value: 'SieMatic', label: 'Client' },
+      { value: 'Client 6', label: 'Client' },
       { value: 'Branding', label: 'Categories' },
       { value: 'Print', label: 'Format' }
     ]
