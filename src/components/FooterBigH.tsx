@@ -44,35 +44,35 @@ const Footer: React.FC = () => {
           {/* Links */}
           <div className="flex flex-col md:flex-row gap-2 md:gap-8">
             <a 
-              href="https://research.mouthwash.studio/" 
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:text-black transition-colors"
             >
-              Mouthwash Research Center
+              Postmodern Agency
             </a> 
             <a 
-              href="https://findings.mouthwash.studio" 
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:text-black transition-colors"
             >
-              Findings
+              Block 1
             </a> 
             <a 
-              href="https://cafetondo.com" 
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:text-black transition-colors"
             >
-              Café Tondo
+              Block 2
             </a>
           </div> 
           
           {/* Adresse */}
           <div className="text-left md:text-right leading-relaxed">
             <a 
-              href="https://maps.app.goo.gl/ZQYdBuF2Zr5vk4tf9" 
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:text-black transition-colors"
