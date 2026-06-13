@@ -284,14 +284,19 @@ export default function ShaderUniverse() {
 
   return (
     <section className="relative w-full h-[400vh] bg-transparent">
-      <div className="sticky top-0 left-0 w-full h-[100dvh] overflow-hidden">
-        <canvas ref={canvasRef} className="block w-full h-full" />
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
         
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-black text-center z-10">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.1em] uppercase opacity-90">
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
+        
+        {/* === DER FIX === */}
+        {/* w-[100vw] ignoriert die Scrollbar und nimmt immer 100% des Monitors. 
+            Dadurch bleibt die exakte Mitte immer auf dem gleichen Pixel stehen! */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-full flex items-center justify-center pointer-events-none z-10">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] uppercase opacity-100 text-[#22468a] text-center">
             Postmodern
           </h1>
         </div>
+        
       </div>
     </section>
   );

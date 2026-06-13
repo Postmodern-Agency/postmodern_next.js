@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image'; // === NEU: Next.js Image Komponente importiert ===
+
+import { PixelatedImage } from './PixelatedImage';
 import HeadlineSection from './HeadlineSection';
 import AnimatedHeading from './AnimatedHeading'; 
 
@@ -98,14 +99,19 @@ export default function References() {
             
             {/* === BILD CONTAINER (60% Breite) === */}
             <div className="relative w-[60%] aspect-[4/5] overflow-hidden bg-gray-100 shrink-0">
-              {/* === FIX: Next.js <Image> statt normalem <img>, verhindert ESLint-Fehler === */}
-              <Image 
+              
+              {/* 2. HIER KOMMT DIE NEUE KOMPONENTE REIN */}
+              <PixelatedImage 
                 src={project.imgSrc} 
-                alt={project.title} 
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
+                alt={project.title}
+                width={800}              // Bestimmt die interne Schärfe des Bildes
+                aspectRatio="4/5"        // Passend zu deinem Container
+                stepDuration={150}       // Geschwindigkeit der Verpixelung
+                delay={200}              // Kurze Pause, bevor es scharf wird
+                initialPixelSize={40}    // Wie "grob" die Pixel am Anfang sind
+                className="object-cover" // Tailwind Klasse
               />
+              
             </div>
 
             {/* === TEXT CONTAINER (40% Breite) === */}

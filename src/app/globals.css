@@ -15,7 +15,9 @@ nextjs-portal {
 /* === 1. DER OVERSCROLL-BLOCKER FÜR DAS HTML === */
 html {
   overscroll-behavior-y: none;
+  scrollbar-gutter: stable; 
 }
+
 
 :root {
   --background: #ffffff; /* Weißer Hintergrund (Standard) */

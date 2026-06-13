@@ -30,8 +30,9 @@ interface AnimatedHighlightProps {
   markerSkew?: string;
   markerScale?: string;
 
-  // === NEU: Damit können wir den Marker von außen an- und ausschalten ===
   isActive?: boolean; 
+  // === FIX 1: textColor im Interface erlauben ===
+  textColor?: string; 
 }
 
 export default function AnimatedHeading({ 
@@ -55,7 +56,9 @@ export default function AnimatedHeading({
   markerSkew = "-5deg",
   markerScale = "1.1",
 
-  isActive = undefined // Standardmäßig undefiniert = Scroll-Modus
+  isActive = undefined,
+  // === FIX 2: textColor als Prop entgegennehmen ===
+  textColor = "" 
 }: AnimatedHighlightProps) {
   
   const containerRef = useRef<HTMLElement>(null);
@@ -64,7 +67,6 @@ export default function AnimatedHeading({
   useGSAP(() => {
     if (!markerRef.current || !containerRef.current) return;
 
-    // === 1. Der "Controlled Mode" für Hover-Effekte (Bleibt gleich) ===
     if (isActive !== undefined) {
       gsap.to(markerRef.current, {
         clipPath: isActive ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)', 
@@ -75,35 +77,31 @@ export default function AnimatedHeading({
       return; 
     }
 
-    // === 2. Der "Once Visible" Modus für Scrollen ===
     const startConfig = { clipPath: 'inset(0 100% 0 0)' };
     const endConfig: gsap.TweenVars = {
       clipPath: 'inset(0 0% 0 0)', 
       duration: 0.4, 
       delay: delay,
       ease: 'power2.out',
-      paused: true // WICHTIG: Wir stoppen den Autostart!
+      paused: true 
     };
 
-    // Wir erstellen die Animation, aber sie ist pausiert (bleibt auf 0%)
     const anim = gsap.fromTo(markerRef.current, startConfig, endConfig);
 
     if (!triggerOnLoad) {
-      // Der native Observer fungiert als "Kameralinse"
       const observer = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
-          anim.play(); // Sobald es im Bild ist: Abspielen!
-          observer.disconnect(); // Danach sofort zerstören (Only Once)
+          anim.play(); 
+          observer.disconnect(); 
         }
       }, {
-        // Triggert, sobald das Element ca. 15% in den Bildschirm ragt
         rootMargin: "-50% 0px -50% 0px"
       });
 
       observer.observe(containerRef.current);
-      return () => observer.disconnect(); // Cleanup
+      return () => observer.disconnect(); 
     } else {
-      anim.play(); // Wenn triggerOnLoad aktiv ist, sofort abspielen
+      anim.play(); 
     }
 
   }, { scope: containerRef, dependencies: [delay, triggerOnLoad, markerWidth, isActive] });
@@ -115,9 +113,11 @@ export default function AnimatedHeading({
   `;
 
   return (
-    <Component ref={containerRef} className={`relative inline-block ${className}`}>
+    // === FIX 3: textColor (falls übergeben) dem Container hinzufügen, ansonsten bleibt er text-current ===
+    <Component ref={containerRef} className={`relative inline-block ${textColor || 'text-current'} ${className}`}>
       {preText && <span>{preText.endsWith(' ') ? preText.slice(0, -1) + '\u00A0' : preText}</span>}
       <span className="relative inline-block whitespace-nowrap">
+        {/* Durch das "text-current" hier unten erbt dieser Span die Farbe aus dem Component-Tag darüber */}
         <span className="relative z-0 text-current">{highlightText}</span>
         <span 
           ref={markerRef}

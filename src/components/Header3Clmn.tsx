@@ -114,24 +114,24 @@ export default function Header() {
         <nav className="flex flex-col md:grid md:grid-cols-10 gap-4 md:gap-1 pt-4 pb-4 leading-tight">
           
           <div className="md:col-span-3 flex flex-col justify-start">
-            <Link href="/" className="w-fit group text-base md:text-xl font-bold tracking-normal">
+            <Link href="/" className="w-fit group text-[#22468a] text-base md:text-xl font-bold tracking-normal">
               <AnimatedHeading 
                 highlightText="Postmodern."
                 markerWidth="115%"              
                 triggerOnLoad={true}           
                 delay={highlightDelay} // === FIX: Hier übergeben wir den dynamischen Wert! ===
-                markerHeight="100%" 
+                markerHeight="72%" 
                 markerOffsetX="0"  
                 markerColorRGB="255 232 62"
               />
             </Link>
 
-            <span className="flex items-center gap-2 mt-[-2px]">
-              Germany <span className="w-[70px] font-light text-xs opacity-70">{time || '...'}</span>
+            <span className="flex items-center gap-2 mt-[-2px] text-[#22468a]">
+              Germany <span className="w-[70px] font-light text-xs opacity-100 text-[#22468a]">{time || '...'}</span>
             </span>
           </div>
 
-          <ul className="md:col-start-5 md:col-span-2 flex flex-row md:flex-col gap-4 md:gap-0 justify-start md:items-end md:text-right">
+          <ul className="text-[#22468a] md:col-start-5 md:col-span-2 flex flex-row md:flex-col gap-4 md:gap-0 justify-start md:items-end md:text-right">
             <li><Link href="/creatives" className="hover:opacity-50 transition-opacity">Creatives</Link></li>
             <li><Link href="/services" className="hover:opacity-50 transition-opacity">Services</Link></li>
             
@@ -145,7 +145,7 @@ export default function Header() {
             </li>
           </ul>
 
-          <ul className="flex flex-row md:flex-col gap-4 md:gap-0 justify-start md:text-right md:col-start-10 md:col-span-1">
+          <ul className="text-[#22468a] flex flex-row md:flex-col gap-4 md:gap-0 justify-start md:text-right md:col-start-10 md:col-span-1">
             <li><Link href="#" className="hover:opacity-50 transition-opacity">Instagram</Link></li>
             <li><Link href="#" className="hover:opacity-50 transition-opacity">Contact</Link></li>
           </ul>

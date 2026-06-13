@@ -2,11 +2,8 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image'; // === PROFI: Next.js Image Import ===
-
-import References from "../components/InfluencerGrid";
 import AnimatedHeading from "../components/AnimatedHeading";
 import ClientGrid from "../components/ClientGrid";
-
 import ProjectList from '../components/ProjectList';
 import ImageUniverse from '../components/ImageUniverse';
 
@@ -123,5 +120,7 @@ export default function Home() {
       </section>
       
     </main>
+
+    
   );
 }
