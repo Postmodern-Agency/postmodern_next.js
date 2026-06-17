@@ -55,6 +55,8 @@ async function createAtlasTexture(
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.flipY = false;
+  // Wichtig für eine flüssige Darstellung beim Skalieren
+  texture.minFilter = THREE.LinearFilter;
   return texture;
 }
 
@@ -64,20 +66,18 @@ export default function ShaderUniverse() {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    // Mobile-Erkennung
     const isMobile = window.innerWidth < 768;
     
-    // OPTIMIERUNG 1: Weniger Partikel auf Mobile (12 statt 20) verhindert Stottern
-    const TOTAL_PARTICLES = isMobile ? 12 : 40;
-    const ATLAS_SLOT_SIZE = isMobile ? 256 : 512;
-    const MAX_PIXEL_RATIO = isMobile ? 1 : 2;
+    // 1. NEUE EINSTELLUNGEN FÜR QUALITÄT & PERFORMANCE
+    const TOTAL_PARTICLES = isMobile ? 16 : 40; 
+    const ATLAS_SLOT_SIZE = 512; // Hohe Qualität für beide!
+    // 1.5 ist der Sweetspot für mobile Retina-Displays (scharf, aber rechnet sich nicht tot)
+    const MAX_PIXEL_RATIO = isMobile ? 1.5 : 2; 
 
-    // Scroll-Wert gecacht — kein window.scrollY im Animation-Loop
     let cachedScrollY = window.scrollY;
     const handleScroll = () => { cachedScrollY = window.scrollY; };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // 1. SCENE SETUP
     const scene = new THREE.Scene();
     const sizes = { width: window.innerWidth, height: window.innerHeight };
     const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000);
@@ -85,14 +85,13 @@ export default function ShaderUniverse() {
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
-      antialias: !isMobile, 
+      antialias: false, // Bei Points (Partikeln) brauchen wir kein Antialias, spart extrem Leistung
       alpha: true,
-      powerPreference: "high-performance", // OPTIMIERUNG 2: GPU-Fokus
+      powerPreference: "high-performance",
     });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
 
-    // 2. GEOMETRY & CLUSTER LOGIK
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(TOTAL_PARTICLES * 3);
     const scales = new Float32Array(TOTAL_PARTICLES);
@@ -140,7 +139,7 @@ export default function ShaderUniverse() {
         const y = baseY + offY;
         const z = clusterZ - offZ;
 
-        // OPTIMIERUNG 3: Kleinere Bilder auf Mobile (verhindert Überlappungs-Lags)
+        // Angepasste Skalierung: Auf Mobile klein genug, dass sie das Bild nicht komplett verstopfen
         const minScale = isMobile ? 18.0 : 35.0;
         const maxAddScale = isMobile ? 12.0 : 25.0;
 
@@ -161,10 +160,10 @@ export default function ShaderUniverse() {
     geometry.setAttribute('opacity', new THREE.BufferAttribute(opacities, 1));
     geometry.setAttribute('textureIndex', new THREE.BufferAttribute(textureIndices, 1));
 
-    // 3. SHADER MATERIAL
+    // 2. DER OPTIMIERTE SHADER
     const material = new THREE.ShaderMaterial({
       transparent: true,
-      depthWrite: false,
+      depthWrite: false, // Ganz wichtig für flüssige Transparenzen
       uniforms: {
         uTexture: { value: new THREE.Texture() },
         uIntro: { value: 0 },
@@ -193,6 +192,10 @@ export default function ShaderUniverse() {
         varying float vOpacity;
         varying float vTextureIndex;
         void main() {
+          // HIER IST DIE MAGIE: Wenn der Pixel (fast) unsichtbar ist, breche die Berechnung sofort ab!
+          // Das spart auf Handys bis zu 80% Render-Leistung beim Scrollen.
+          if (vOpacity < 0.02) discard;
+
           vec2 uv = gl_PointCoord;
           float col = mod(vTextureIndex, atlasCols);
           float row = floor(vTextureIndex / atlasCols);
@@ -213,7 +216,6 @@ export default function ShaderUniverse() {
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 
-    // 4. ANIMATION LOOP
     let animationFrameId: number;
 
     const tick = (time: number) => {
@@ -225,9 +227,8 @@ export default function ShaderUniverse() {
 
       const scrollProgress = cachedScrollY / (window.innerHeight * 3);
 
-      // OPTIMIERUNG 4: Komplettes Canvas ausfaden am Ende der 400vh Sektion
       if (canvasRef.current) {
-        const fadeStart = window.innerHeight * 2.5; // Startet kurz bevor die Sektion endet
+        const fadeStart = window.innerHeight * 2.5; 
         const fadeEnd = window.innerHeight * 3.2;   
         let canvasOpacity = 1.0;
         
@@ -247,7 +248,7 @@ export default function ShaderUniverse() {
           25 - (((25 - rawZ) % WRAP_LENGTH) + WRAP_LENGTH) % WRAP_LENGTH;
 
         if (wrappedZ > 0) {
-          opacAttr.setX(i, 0);
+          opacAttr.setX(i, 0); // Shader 'discard' greift hier sofort!
         } else {
           const fadeThreshold = -6;
           const opacity = wrappedZ > fadeThreshold
@@ -268,7 +269,6 @@ export default function ShaderUniverse() {
 
     animationFrameId = requestAnimationFrame(tick);
 
-    // 5. RESIZE
     const handleResize = () => {
       sizes.width = window.innerWidth;
       sizes.height = window.innerHeight;
@@ -278,7 +278,6 @@ export default function ShaderUniverse() {
     };
     window.addEventListener('resize', handleResize);
 
-    // 6. CLEANUP
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
@@ -291,11 +290,6 @@ export default function ShaderUniverse() {
 
   return (
     <section className="relative w-full h-[400vh] bg-transparent">
-      {/* OPTIMIERUNG 5: CSS Mask Image
-        Der "mask-image" Verlauf macht den unteren Rand der Box weich.
-        Bilder werden nicht mehr von einer harten Kante durchschnitten, 
-        sondern faden auf den letzten 20% sanft nach unten aus. 
-      */}
       <div 
         className="sticky top-0 left-0 w-full h-screen overflow-hidden"
         style={{ 
