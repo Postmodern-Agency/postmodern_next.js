@@ -66,7 +66,9 @@ export default function ShaderUniverse() {
 
     // Mobile-Erkennung
     const isMobile = window.innerWidth < 768;
-    const TOTAL_PARTICLES = isMobile ? 20 : 40;
+    
+    // OPTIMIERUNG 1: Weniger Partikel auf Mobile (12 statt 20) verhindert Stottern
+    const TOTAL_PARTICLES = isMobile ? 12 : 40;
     const ATLAS_SLOT_SIZE = isMobile ? 256 : 512;
     const MAX_PIXEL_RATIO = isMobile ? 1 : 2;
 
@@ -83,8 +85,9 @@ export default function ShaderUniverse() {
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
-      antialias: !isMobile, // Auf Mobile deaktiviert für bessere Performance
+      antialias: !isMobile, 
       alpha: true,
+      powerPreference: "high-performance", // OPTIMIERUNG 2: GPU-Fokus
     });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
@@ -137,10 +140,14 @@ export default function ShaderUniverse() {
         const y = baseY + offY;
         const z = clusterZ - offZ;
 
+        // OPTIMIERUNG 3: Kleinere Bilder auf Mobile (verhindert Überlappungs-Lags)
+        const minScale = isMobile ? 18.0 : 35.0;
+        const maxAddScale = isMobile ? 12.0 : 25.0;
+
         positions[pIdx * 3] = x;
         positions[pIdx * 3 + 1] = y;
         positions[pIdx * 3 + 2] = z;
-        scales[pIdx] = 35.0 + Math.random() * 25.0;
+        scales[pIdx] = minScale + Math.random() * maxAddScale; 
         opacities[pIdx] = 0;
         textureIndices[pIdx] = Math.floor(Math.random() * IMAGE_PATHS.length);
 
@@ -206,7 +213,7 @@ export default function ShaderUniverse() {
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 
-    // 4. ANIMATION LOOP — kein window.scrollY, nur cachedScrollY
+    // 4. ANIMATION LOOP
     let animationFrameId: number;
 
     const tick = (time: number) => {
@@ -218,6 +225,18 @@ export default function ShaderUniverse() {
 
       const scrollProgress = cachedScrollY / (window.innerHeight * 3);
 
+      // OPTIMIERUNG 4: Komplettes Canvas ausfaden am Ende der 400vh Sektion
+      if (canvasRef.current) {
+        const fadeStart = window.innerHeight * 2.5; // Startet kurz bevor die Sektion endet
+        const fadeEnd = window.innerHeight * 3.2;   
+        let canvasOpacity = 1.0;
+        
+        if (cachedScrollY > fadeStart) {
+          canvasOpacity = 1.0 - (cachedScrollY - fadeStart) / (fadeEnd - fadeStart);
+        }
+        canvasRef.current.style.opacity = Math.max(0, Math.min(1, canvasOpacity)).toString();
+      }
+
       const posAttr = geometry.getAttribute('position');
       const opacAttr = geometry.getAttribute('opacity');
 
@@ -227,20 +246,17 @@ export default function ShaderUniverse() {
         const wrappedZ =
           25 - (((25 - rawZ) % WRAP_LENGTH) + WRAP_LENGTH) % WRAP_LENGTH;
 
-       
+        if (wrappedZ > 0) {
+          opacAttr.setX(i, 0);
+        } else {
+          const fadeThreshold = -6;
+          const opacity = wrappedZ > fadeThreshold
+            ? Math.max(0, wrappedZ / fadeThreshold)
+            : 1.0;
+          opacAttr.setX(i, opacity);
+        }
 
-      // Partikel, die bereits durch die Kamera sind: verstecken
-if (wrappedZ > 0) {
-  opacAttr.setX(i, 0);
-} else {
-  const fadeThreshold = -6;
-  const opacity = wrappedZ > fadeThreshold
-    ? Math.max(0, wrappedZ / fadeThreshold)
-    : 1.0;
-  opacAttr.setX(i, opacity);
-}
-
-posAttr.setXYZ(i, p.x, p.y, wrappedZ);
+        posAttr.setXYZ(i, p.x, p.y, wrappedZ);
       }
 
       posAttr.needsUpdate = true;
@@ -275,7 +291,18 @@ posAttr.setXYZ(i, p.x, p.y, wrappedZ);
 
   return (
     <section className="relative w-full h-[400vh] bg-transparent">
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+      {/* OPTIMIERUNG 5: CSS Mask Image
+        Der "mask-image" Verlauf macht den unteren Rand der Box weich.
+        Bilder werden nicht mehr von einer harten Kante durchschnitten, 
+        sondern faden auf den letzten 20% sanft nach unten aus. 
+      */}
+      <div 
+        className="sticky top-0 left-0 w-full h-screen overflow-hidden"
+        style={{ 
+          maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
+        }}
+      >
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-full flex items-center justify-center pointer-events-none z-10">
           <h1 className="text-2xl md:text-4xl font-bold tracking-[-0.02em] uppercase opacity-100 text-[#22468a] text-center">
